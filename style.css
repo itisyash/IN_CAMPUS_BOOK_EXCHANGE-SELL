@@ -1,0 +1,38 @@
+#chat {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+}
+
+#messages {
+    height: 300px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #fff;
+}
+
+#message {
+    width: calc(100% - 80px);
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+button {
+    width: 70px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #28a745;
+    color: white;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #218838;
+}
