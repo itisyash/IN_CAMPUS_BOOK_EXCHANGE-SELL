@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        #chat {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+        }
+        #messages {
+            height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #fff;
+        }
+        #message {
+            width: calc(100% - 80px);
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            width: 70px;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #28a745;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div id="chat">
+        <h1>Chat with User {{ receiver_id }}</h1>
+        <div id="messages">
+            <!-- Messages will appear here -->
+        </div>
+        <input type="text" id="message" placeholder="Type a message...">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+
+    <!-- Include SocketIO library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script>
+        // Connect to the SocketIO server
+        const socket = io();
+
+        // Replace with actual sender ID (you can hardcode or fetch from the backend)
+        const sender_id = 1; // Example: Current user's ID
+        const receiver_id = {{ receiver_id }}; // Receiver's ID passed from the backend
+
+        // Listen for incoming messages
+        socket.on('message', function(data) {
+            const messages = document.getElementById('messages');
+            const messageElement = document.createElement('p');
+            messageElement.textContent = `User ${data.sender_id}: ${data.message}`;
+            messages.appendChild(messageElement);
+            messages.scrollTop = messages.scrollHeight; // Auto-scroll to the latest message
+        });
+
+        // Function to send a message
+        function sendMessage() {
+            const messageInput = document.getElementById('message');
+            const message = messageInput.value.trim();
+
+            if (message) {
+                // Emit the message to the server
+                socket.emit('message', {
+                    sender_id: sender_id,
+                    receiver_id: receiver_id,
+                    message: message
+                });
+
+                // Clear the input field
+                messageInput.value = '';
+            }
+        }
+    </script>
+</body>
+</html>
